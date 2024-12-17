@@ -10,6 +10,8 @@ It has one tool, `chat` which relays a question to a configured AI Chat Provider
 
 ![Claude uses OpenAI](img/screencap.mov)
 
+<a href="https://glama.ai/mcp/servers/nuksdrfb55"><img width="380" height="200" src="https://glama.ai/mcp/servers/nuksdrfb55/badge" /></a>
+
 ## Development
 
 Install dependencies:

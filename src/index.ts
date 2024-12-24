@@ -13,8 +13,21 @@ import {
 } from "@modelcontextprotocol/sdk/types.js";
 
 import OpenAI from 'openai';
+import { APIError } from 'openai/error.js';
 
 dotenv.config();
+
+// Common model names that work with OpenAI-compatible APIs
+const COMMON_MODELS = [
+  'gpt-3.5-turbo',
+  'gpt-4-turbo-preview',
+  'gpt-4',
+  'gpt-4-0125-preview',
+  'claude-3-opus-20240229',
+  'claude-3-sonnet-20240229',
+  'claude-2.1',
+  'gpt-4o-mini'
+];
 
 const AI_CHAT_BASE_URL = process.env.AI_CHAT_BASE_URL;
 const AI_CHAT_KEY = process.env.AI_CHAT_KEY;
@@ -106,24 +119,54 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         throw new Error("Content is required")
       }
 
+      // Basic model validation
+      if (!AI_CHAT_MODEL || !COMMON_MODELS.includes(AI_CHAT_MODEL)) {
+        console.warn(`Warning: Model ${AI_CHAT_MODEL} is not in list of common models. This may still work if your provider supports it.`);
+      }
+
       const client = new OpenAI({
         apiKey: AI_CHAT_KEY,
         baseURL: AI_CHAT_BASE_URL,
       });
 
-      const chatCompletion = await client.chat.completions.create({
-        messages: [{ role: 'user', content: content }],
-        model: AI_CHAT_MODEL,
-      });
+      try {
+        const chatCompletion = await client.chat.completions.create({
+          messages: [{ role: 'user', content: content }],
+          model: AI_CHAT_MODEL,
+        });
 
-      // console.log(chatCompletion.choices[0]!.message?.content);
-      return {
-        content: [
-          {
-            type: "text",
-            text: chatCompletion.choices[0]!.message?.content
+        return {
+          content: [
+            {
+              type: "text",
+              text: chatCompletion.choices[0]?.message?.content
+            }
+          ]
+        }
+      } catch (error) {
+        if (error instanceof APIError) {
+          switch (error.status) {
+            case 404:
+              throw new Error(
+                `Model '${AI_CHAT_MODEL}' not found or not accessible. Check:\n` +
+                `1. Your API key has access to this model\n` +
+                `2. The model name is correct for your provider\n` +
+                `3. Your provider supports this model\n` +
+                `Common models: ${COMMON_MODELS.join(', ')}`
+              );
+            case 429:
+              throw new Error(
+                `API rate limit exceeded. Check:\n` +
+                `1. Your current API quota and billing status\n` +
+                `2. Implement rate limiting in your application\n` +
+                `3. Consider using a different model or provider`
+              );
+            default:
+              throw new Error(`API Error (${error.status}): ${error.message}`);
           }
-        ]
+        }
+        // Re-throw unknown errors
+        throw error;
       }
     }
 

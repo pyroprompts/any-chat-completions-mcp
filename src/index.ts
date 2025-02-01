@@ -109,21 +109,45 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
       const client = new OpenAI({
         apiKey: AI_CHAT_KEY,
         baseURL: AI_CHAT_BASE_URL,
+        timeout: 30000, // 30 second timeout for longer queries
       });
 
-      const chatCompletion = await client.chat.completions.create({
-        messages: [{ role: 'user', content: content }],
-        model: AI_CHAT_MODEL,
-      });
+      try {
+        const chatCompletion = await client.chat.completions.create({
+          messages: [
+            { role: 'system', content: 'Be precise and concise.' },
+            { role: 'user', content: content }
+          ],
+          model: AI_CHAT_MODEL.trim(), // Trim to remove any whitespace
+        });
 
-      // console.log(chatCompletion.choices[0]!.message?.content);
-      return {
-        content: [
-          {
-            type: "text",
-            text: chatCompletion.choices[0]!.message?.content
-          }
-        ]
+        const responseContent = chatCompletion.choices[0]?.message?.content;
+        
+        if (!responseContent) {
+          throw new Error('No response content received from API');
+        }
+
+        return {
+          content: [
+            {
+              type: "text",
+              text: responseContent
+            }
+          ]
+        };
+      } catch (error: any) {
+        const errorMessage = error.response?.data?.error?.message || error.message || 'Unknown error occurred';
+        console.error('Chat completion error:', errorMessage);
+        
+        return {
+          content: [
+            {
+              type: "text",
+              text: `Error: ${errorMessage}`
+            }
+          ],
+          isError: true
+        };
       }
     }
 

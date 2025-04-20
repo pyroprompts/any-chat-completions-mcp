@@ -1,0 +1,29 @@
+# Smithery configuration file: https://smithery.ai/docs/config#smitheryyaml
+
+startCommand:
+  type: stdio
+  configSchema:
+    # JSON Schema defining the configuration options for the MCP.
+    type: object
+    required:
+      - aiChatKey
+      - aiChatName
+      - aiChatModel
+      - aiChatBaseUrl
+    properties:
+      aiChatKey:
+        type: string
+        description: The API key for the AI Chat provider.
+      aiChatName:
+        type: string
+        description: The name of the AI Chat provider.
+      aiChatModel:
+        type: string
+        description: The AI Chat model to use.
+      aiChatBaseUrl:
+        type: string
+        description: The base URL for the AI Chat provider's API.
+  commandFunction:
+    # A function that produces the CLI command to start the MCP on stdio.
+    |-
+    config => ({ command: 'node', args: ['build/index.js'], env: { AI_CHAT_KEY: config.aiChatKey, AI_CHAT_NAME: config.aiChatName, AI_CHAT_MODEL: config.aiChatModel, AI_CHAT_BASE_URL: config.aiChatBaseUrl } })

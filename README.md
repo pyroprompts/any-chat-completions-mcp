@@ -1,5 +1,6 @@
 # any-chat-completions-mcp MCP Server
 
+
 Integrate Claude with Any OpenAI SDK Compatible Chat Completion API - OpenAI, Perplexity, Groq, xAI, PyroPrompts and more.
 
 This implements the Model Context Protocol Server. Learn more: [https://modelcontextprotocol.io](https://modelcontextprotocol.io)
@@ -10,7 +11,10 @@ It has one tool, `chat` which relays a question to a configured AI Chat Provider
 
 ![Claude uses OpenAI](img/screencap.mov)
 
+
 <a href="https://glama.ai/mcp/servers/nuksdrfb55"><img width="380" height="200" src="https://glama.ai/mcp/servers/nuksdrfb55/badge" /></a>
+
+[![smithery badge](https://smithery.ai/badge/any-chat-completions-mcp-server)](https://smithery.ai/server/any-chat-completions-mcp-server)
 
 ## Development
 
@@ -111,6 +115,14 @@ With these three, you'll see a tool for each in the Claude Desktop Home:
 And then you can chat with other LLMs and it shows in chat like this:
 
 ![Claude Chat with OpenAI](img/claude_chat_openai.png)
+
+### Installing via Smithery
+
+To install Any OpenAI Compatible API Integrations for Claude Desktop automatically via [Smithery](https://smithery.ai/server/any-chat-completions-mcp-server):
+
+```bash
+npx -y @smithery/cli install any-chat-completions-mcp-server --client claude
+```
 
 ### Debugging
 

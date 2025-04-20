@@ -13,6 +13,7 @@ It has one tool, `chat` which relays a question to a configured AI Chat Provider
 
 
 <a href="https://glama.ai/mcp/servers/nuksdrfb55"><img width="380" height="200" src="https://glama.ai/mcp/servers/nuksdrfb55/badge" /></a>
+
 [![smithery badge](https://smithery.ai/badge/any-chat-completions-mcp-server)](https://smithery.ai/server/any-chat-completions-mcp-server)
 
 ## Development

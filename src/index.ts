@@ -20,6 +20,8 @@ const AI_CHAT_BASE_URL = process.env.AI_CHAT_BASE_URL;
 const AI_CHAT_KEY = process.env.AI_CHAT_KEY;
 const AI_CHAT_MODEL = process.env.AI_CHAT_MODEL;
 const AI_CHAT_NAME = process.env.AI_CHAT_NAME;
+const AI_CHAT_TIMEOUT = process.env.AI_CHAT_TIMEOUT || 30000;
+const AI_CHAT_SYSTEM_PROMPT = process.env.AI_CHAT_SYSTEM_PROMPT;
 
 if (!AI_CHAT_BASE_URL) {
   throw new Error("AI_CHAT_BASE_URL is required")
@@ -109,21 +111,45 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
       const client = new OpenAI({
         apiKey: AI_CHAT_KEY,
         baseURL: AI_CHAT_BASE_URL,
+        timeout: parseInt(AI_CHAT_TIMEOUT, 10),
       });
 
-      const chatCompletion = await client.chat.completions.create({
-        messages: [{ role: 'user', content: content }],
-        model: AI_CHAT_MODEL,
-      });
+      try {
+        const chatCompletion = await client.chat.completions.create({
+          messages: [
+            ...(AI_CHAT_SYSTEM_PROMPT ? [{ role: 'system', content: AI_CHAT_SYSTEM_PROMPT }] : []),
+            { role: 'user', content: content }
+          ],
+          model: AI_CHAT_MODEL.trim(), // Trim to remove any whitespace
+        });
 
-      // console.log(chatCompletion.choices[0]!.message?.content);
-      return {
-        content: [
-          {
-            type: "text",
-            text: chatCompletion.choices[0]!.message?.content
-          }
-        ]
+        const responseContent = chatCompletion.choices[0]?.message?.content;
+        
+        if (!responseContent) {
+          throw new Error('No response content received from API');
+        }
+
+        return {
+          content: [
+            {
+              type: "text",
+              text: responseContent
+            }
+          ]
+        };
+      } catch (error: any) {
+        const errorMessage = error.response?.data?.error?.message || error.message || 'Unknown error occurred';
+        console.error('Chat completion error:', errorMessage);
+        
+        return {
+          content: [
+            {
+              type: "text",
+              text: `Error: ${errorMessage}`
+            }
+          ],
+          isError: true
+        };
       }
     }
 

@@ -20,6 +20,8 @@ const AI_CHAT_BASE_URL = process.env.AI_CHAT_BASE_URL;
 const AI_CHAT_KEY = process.env.AI_CHAT_KEY;
 const AI_CHAT_MODEL = process.env.AI_CHAT_MODEL;
 const AI_CHAT_NAME = process.env.AI_CHAT_NAME;
+const AI_CHAT_TIMEOUT = process.env.AI_CHAT_TIMEOUT || 30000;
+const AI_CHAT_SYSTEM_PROMPT = process.env.AI_CHAT_SYSTEM_PROMPT;
 
 if (!AI_CHAT_BASE_URL) {
   throw new Error("AI_CHAT_BASE_URL is required")
@@ -109,13 +111,13 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
       const client = new OpenAI({
         apiKey: AI_CHAT_KEY,
         baseURL: AI_CHAT_BASE_URL,
-        timeout: 30000, // 30 second timeout for longer queries
+        timeout: parseInt(AI_CHAT_TIMEOUT, 10),
       });
 
       try {
         const chatCompletion = await client.chat.completions.create({
           messages: [
-            { role: 'system', content: 'Be precise and concise.' },
+            ...(AI_CHAT_SYSTEM_PROMPT ? [{ role: 'system', content: AI_CHAT_SYSTEM_PROMPT }] : []),
             { role: 'user', content: content }
           ],
           model: AI_CHAT_MODEL.trim(), // Trim to remove any whitespace

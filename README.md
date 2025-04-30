@@ -39,6 +39,30 @@ On MacOS: `~/Library/Application Support/Claude/claude_desktop_config.json`
 On Windows: `%APPDATA%/Claude/claude_desktop_config.json`
 
 
+You can use it via `npx` in your Claude Desktop configuration like this:
+
+```json
+{
+  "mcpServers": {
+    "chat-openai": {
+      "command": "npx",
+      "args": [
+        "any-chat-completions-mcp"
+      ],
+      "env": {
+        "AI_CHAT_KEY": "OPENAI_KEY",
+        "AI_CHAT_NAME": "OpenAI",
+        "AI_CHAT_MODEL": "gpt-4o",
+        "AI_CHAT_BASE_URL": "https://api.openai.com/v1"
+      }
+    }
+  }
+}
+```
+
+
+Or, if you clone the repo, you can build and use in your Claude Desktop configuration like this:
+
 
 ```json
 
@@ -113,6 +137,8 @@ With these three, you'll see a tool for each in the Claude Desktop Home:
 And then you can chat with other LLMs and it shows in chat like this:
 
 ![Claude Chat with OpenAI](img/claude_chat_openai.png)
+
+
 
 ### Installing via Smithery
 

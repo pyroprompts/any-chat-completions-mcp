@@ -1,20 +1,22 @@
 {
-  "name": "any-chat-completions-mcp-server",
+  "name": "any-chat-completions-mcp",
   "version": "0.1.0",
-  "description": "A Model Context Protocol server",
-  "private": true,
+  "description": "A Model Context Protocol server for integrating with any OpenAI SDK compatible Chat Completion API",
   "type": "module",
   "bin": {
-    "any-chat-completions-mcp-server": "./build/index.js"
+    "any-chat-completions-mcp": "build/cli.js"
   },
   "files": [
     "build"
   ],
   "scripts": {
-    "build": "tsc && node -e \"require('fs').chmodSync('build/index.js', '755')\"",
+    "build": "tsc && node -e \"require('fs').chmodSync('build/index.js', '755'); require('fs').chmodSync('build/cli.js', '755')\"",
     "prepare": "npm run build",
     "watch": "tsc --watch",
-    "inspector": "npx @modelcontextprotocol/inspector build/index.js"
+    "inspector": "npx @modelcontextprotocol/inspector build/index.js",
+    "clean": "rm -rf build",
+    "npm-publish": "npm run clean && npm run build && npm publish --access=public",
+    "start": "node build/cli.js"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "0.6.0",
@@ -24,5 +26,23 @@
   "devDependencies": {
     "@types/node": "^20.11.24",
     "typescript": "^5.3.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pyroprompts/any-chat-completions-mcp.git"
+  },
+  "keywords": [
+    "claude",
+    "openai",
+    "mcp",
+    "model-context-protocol",
+    "ai",
+    "chat",
+    "llm"
+  ],
+  "author": "PyroPrompts",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18"
   }
 }

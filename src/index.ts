@@ -111,15 +111,19 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
       const client = new OpenAI({
         apiKey: AI_CHAT_KEY,
         baseURL: AI_CHAT_BASE_URL,
-        timeout: parseInt(AI_CHAT_TIMEOUT, 10),
+        timeout: parseInt(`${AI_CHAT_TIMEOUT}`, 10),
       });
 
       try {
+        const messages: [OpenAI.ChatCompletionMessageParam]  = [
+          { role: 'user', content: content }
+        ];
+        if (AI_CHAT_SYSTEM_PROMPT) {
+          messages.unshift({ role: 'system', content: `${AI_CHAT_SYSTEM_PROMPT}` });
+        }
+        messages.push();
         const chatCompletion = await client.chat.completions.create({
-          messages: [
-            ...(AI_CHAT_SYSTEM_PROMPT ? [{ role: 'system', content: AI_CHAT_SYSTEM_PROMPT }] : []),
-            { role: 'user', content: content }
-          ],
+          messages, 
           model: AI_CHAT_MODEL.trim(), // Trim to remove any whitespace
         });
 

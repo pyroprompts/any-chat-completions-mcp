@@ -111,7 +111,7 @@ You can add multiple providers by referencing the same MCP server multiple times
       "env": {
         "AI_CHAT_KEY": "PERPLEXITY_KEY",
         "AI_CHAT_NAME": "Perplexity",
-        "AI_CHAT_MODEL": "llama-3.1-sonar-small-128k-online",
+        "AI_CHAT_MODEL": "sonar",
         "AI_CHAT_BASE_URL": "https://api.perplexity.ai"
       }
     },
@@ -130,6 +130,22 @@ You can add multiple providers by referencing the same MCP server multiple times
   }
 }
 ```
+
+Or, configure in [LibreChat](https://www.librechat.ai/) like:
+```yaml
+  chat-perplexity:
+    type: stdio
+    command: npx
+    args:
+      - -y
+      - any-chat-completions-mcp
+    env:
+      AI_CHAT_KEY: "pplx-012345679"
+      AI_CHAT_NAME: Perplexity
+      AI_CHAT_MODEL: sonar
+      AI_CHAT_BASE_URL: "https://api.perplexity.ai"
+      PATH: '/usr/local/bin:/usr/bin:/bin'
+````
 
 With these three, you'll see a tool for each in the Claude Desktop Home:
 

@@ -131,6 +131,14 @@ You can add multiple providers by referencing the same MCP server multiple times
 }
 ```
 
+With these three, you'll see a tool for each in the Claude Desktop Home:
+
+![Claude Desktop Home with Chat Tools](img/claude_desktop_home.png)
+
+And then you can chat with other LLMs and it shows in chat like this:
+
+![Claude Chat with OpenAI](img/claude_chat_openai.png)
+
 Or, configure in [LibreChat](https://www.librechat.ai/) like:
 ```yaml
   chat-perplexity:
@@ -147,13 +155,10 @@ Or, configure in [LibreChat](https://www.librechat.ai/) like:
       PATH: '/usr/local/bin:/usr/bin:/bin'
 ````
 
-With these three, you'll see a tool for each in the Claude Desktop Home:
+And it shows in LibreChat:
 
-![Claude Desktop Home with Chat Tools](img/claude_desktop_home.png)
+![LibreChat with Perplexity Chat](img/librechat.png)
 
-And then you can chat with other LLMs and it shows in chat like this:
-
-![Claude Chat with OpenAI](img/claude_chat_openai.png)
 
 
 

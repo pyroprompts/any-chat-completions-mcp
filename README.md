@@ -48,7 +48,7 @@ You can use it via `npx` in your Claude Desktop configuration like this:
     "chat-openai": {
       "command": "npx",
       "args": [
-        "any-chat-completions-mcp"
+        "@pyroprompts/any-chat-completions-mcp"
       ],
       "env": {
         "AI_CHAT_KEY": "OPENAI_KEY",
@@ -138,7 +138,7 @@ Or, configure in [LibreChat](https://www.librechat.ai/) like:
     command: npx
     args:
       - -y
-      - any-chat-completions-mcp
+      - @pyroprompts/any-chat-completions-mcp
     env:
       AI_CHAT_KEY: "pplx-012345679"
       AI_CHAT_NAME: Perplexity

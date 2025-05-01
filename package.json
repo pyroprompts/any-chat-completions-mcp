@@ -1,6 +1,6 @@
 {
-  "name": "any-chat-completions-mcp",
-  "version": "0.1.0",
+  "name": "@pyroprompts/any-chat-completions-mcp",
+  "version": "0.1.1",
   "description": "A Model Context Protocol server for integrating with any OpenAI SDK compatible Chat Completion API",
   "type": "module",
   "bin": {
